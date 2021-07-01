@@ -1,15 +1,15 @@
 const GAME_STATE = {
-  FirstCardAwaits: "FirstCardAwaits",
-  SecondCardAwaits: "SecondCardAwaits",
-  CardsMatchFailed: "CardsMatchFailed",
-  CardsMatched: "CardsMatched",
-  GameFinished: "GameFinished",
+  FirstCardAwaits: 'FirstCardAwaits',
+  SecondCardAwaits: 'SecondCardAwaits',
+  CardsMatchFailed: 'CardsMatchFailed',
+  CardsMatched: 'CardsMatched',
+  GameFinished: 'GameFinished',
 }
 const Symbols = [
-  "https://image.flaticon.com/icons/svg/105/105223.svg", // 黑桃
-  "https://image.flaticon.com/icons/svg/105/105220.svg", // 愛心
-  "https://image.flaticon.com/icons/svg/105/105212.svg", // 方塊
-  "https://image.flaticon.com/icons/svg/105/105219.svg", // 梅花
+  'https://image.flaticon.com/icons/svg/105/105223.svg', // 黑桃
+  'https://image.flaticon.com/icons/svg/105/105220.svg', // 愛心
+  'https://image.flaticon.com/icons/svg/105/105212.svg', // 方塊
+  'https://image.flaticon.com/icons/svg/105/105219.svg', // 梅花
 ]
 
 const view = {
@@ -28,66 +28,66 @@ const view = {
   transformNumber(number) {
     switch (number) {
       case 1:
-        return "A"
+        return 'A'
       case 11:
-        return "J"
+        return 'J'
       case 12:
-        return "Q"
+        return 'Q'
       case 13:
-        return "K"
+        return 'K'
       default:
         return number
     }
   },
   displayCards(indexes) {
-    const rootElement = document.querySelector("#cards")
+    const rootElement = document.querySelector('#cards')
     rootElement.innerHTML = indexes
       .map((index) => this.getCardElement(index))
-      .join("")
+      .join('')
   },
   flipCards(...cards) {
     cards.map((card) => {
-      if (card.classList.contains("back")) {
+      if (card.classList.contains('back')) {
         // 回傳正面
-        card.classList.remove("back")
+        card.classList.remove('back')
         card.innerHTML = this.getCardContent(Number(card.dataset.index)) // 暫時給定 10
         return
       }
       // 回傳背面
-      card.classList.add("back")
+      card.classList.add('back')
       card.innerHTML = null
     })
   },
   pairCards(...cards) {
     cards.map((card) => {
-      card.classList.add("paired")
+      card.classList.add('paired')
     })
   },
   renderScore(score) {
-    document.querySelector(".score").innerHTML = `Score: ${score}`
+    document.querySelector('.score').innerHTML = `Score: ${score}`
   },
   renderTriedTimes(times) {
-    document.querySelector(".tried").innerHTML = `You've tried: ${times} times`
+    document.querySelector('.tried').innerHTML = `You've tried: ${times} times`
   },
   appendWrongAnimation(...cards) {
     cards.map((card) => {
-      card.classList.add("wrong")
+      card.classList.add('wrong')
       card.addEventListener(
-        "animationend",
-        (event) => event.target.classList.remove("wrong"),
+        'animationend',
+        (event) => event.target.classList.remove('wrong'),
         { once: true }
       )
     })
   },
   showGameFinished() {
-    const div = document.createElement("div")
-    div.classList.add("completed")
+    const div = document.createElement('div')
+    div.classList.add('completed')
     div.innerHTML = `
       <p>Complete!</p>
       <p>Score: ${model.score}</p>
       <p>You've tried: ${model.triedTimes} times</p>
     `
-    const header = document.querySelector("#header")
+    const header = document.querySelector('#header')
     header.before(div)
   },
 }
@@ -110,7 +110,7 @@ const controller = {
     view.displayCards(utility.getRandomNumberArray(52))
   },
   dispatchCardAction(card) {
-    if (!card.classList.contains("back")) {
+    if (!card.classList.contains('back')) {
       return
     }
     switch (this.currentState) {
@@ -131,7 +131,7 @@ const controller = {
           view.pairCards(...model.revealedCards)
           model.revealedCards = []
           if (model.score === 260) {
-            console.log("showGameFinished")
+            console.log('showGameFinished')
             this.currentState = GAME_STATE.GameFinished
             view.showGameFinished() // 加在這裡
             return
@@ -145,9 +145,9 @@ const controller = {
         }
         break
     }
-    console.log("this.currentState", this.currentState)
+    console.log('this.currentState', this.currentState)
     console.log(
-      "revealedCards",
+      'revealedCards',
       model.revealedCards.map((card) => card.dataset.index)
     )
   },
@@ -173,8 +173,8 @@ const utility = {
 }
 
 controller.generateCards()
-document.querySelectorAll(".card").forEach((card) => {
-  card.addEventListener("click", (event) => {
+document.querySelectorAll('.card').forEach((card) => {
+  card.addEventListener('click', (event) => {
     controller.dispatchCardAction(card)
   })
 })
